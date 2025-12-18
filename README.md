@@ -84,6 +84,7 @@ AI_API_KEY=your_api_key_here
 
 ```
 
-⚠️ Note: The frontend UI is  completed. The backend is currently under development and will be available soon.
+⚠️ Note: The frontend UI is  completed. The backend is currently under progress and will be available soon.
+
 
 
