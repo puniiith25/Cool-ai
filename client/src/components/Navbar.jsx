@@ -1,44 +1,54 @@
-import React, { useState } from 'react'
-import { assets } from '../assets/assets.js'
-import { useNavigate } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react';
-import { useClerk, UserButton, useUser } from '@clerk/clerk-react'
-import LogInForm from './LoginPage.jsx';
+import { useState, useEffect } from "react";
+import { useAuth } from "./../components/AuthContext";
+import LogInForm from "./LoginPage";
 
 const Navbar = () => {
-    const Navigate = useNavigate();
-    const { user } = useUser()
 
-    const [showLogin, setShowlogin] = useState(false)
+    const { user, logout } = useAuth();
+    const [showLogin, setShowlogin] = useState(false);
+
+    useEffect(() => {
+        if (user) setShowlogin(false);
+    }, [user]);
 
     return (
         <>
-            <div className='fixed z-50 w-full backdrop-blur-2xl flex justify-between items-center py-3 px-4 sm:px-5 xl:px-5'>
+            <div className="fixed z-50 w-full backdrop-blur-2xl flex justify-between items-center py-3 px-5">
 
-                <img
-                    src={assets.logo}
-                    alt="logo"
-                    className='w-32 sm:w-44 cursor-pointer'
-                    onClick={() => Navigate('/')}
-                />
+                <h1 className="text-2xl font-bold">Cool.ai</h1>
 
                 {
-                    user
-                        ? <UserButton />
-                        : (
+                    user ? (
+                        <div className="flex items-center gap-3">
+                            <img
+                                src={user.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+                                className="w-10 h-10 rounded-full border"
+                                alt="profile"
+                            />
+
+                            <button
+                                onClick={logout}
+                                className="bg-red-500 text-white px-4 py-1 rounded-full"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    ) :
+                        (
                             <button
                                 onClick={() => setShowlogin(true)}
-                                className='flex items-center gap-1 rounded-full cursor-pointer bg-[#7086E0] text-white px-2.5 w-32 h-8'>
-                                Get started
-                                <ArrowRight className='w-4 h-4' />
+                                className="bg-[#7086E0] text-white px-4 py-1 rounded-full"
+                            >
+                                Login
                             </button>
                         )
                 }
+
             </div>
 
             {showLogin && <LogInForm setShowlogin={setShowlogin} />}
         </>
-    )
-}
+    );
+};
 
-export default Navbar
+export default Navbar;

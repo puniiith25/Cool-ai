@@ -4,12 +4,12 @@ import { assets } from '../assets/assets.js'
 import { useNavigate } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import Sidebar from '../components/Sidebar.jsx'
-import { useUser, SignIn } from '@clerk/clerk-react'
+import { useAuth } from '../components/AuthContext.jsx'
 
 const Layout = () => {
     const navigate = useNavigate();
     const [sidebar, setsidebar] = useState(false);
-    const { user } = useUser();
+    const { user, logout } = useAuth();
     return user ? (
         <>
             <div className='flex flex-col items-start justify-start h-screen'>

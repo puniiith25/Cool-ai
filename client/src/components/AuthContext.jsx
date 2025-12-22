@@ -7,9 +7,12 @@ import {
     GoogleAuthProvider,
     signInWithPopup
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../../src/FirebaseConnection/FireBase";
+import { db } from "../../src/FirebaseConnection/FireBase";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
-export const AuthContext = createContext();
+
+const authContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
 
@@ -27,8 +30,18 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     // Email Signup
-    const signUp = (email, password) =>
-        createUserWithEmailAndPassword(auth, email, password);
+    const signUp = async (email, password) => {
+        const res = await createUserWithEmailAndPassword(auth, email, password);
+
+        await setDoc(doc(db, "users", res.user.uid), {
+            name: res.user.displayName || "User",
+            email: res.user.email,
+            photo: res.user.photoURL || "",
+            createdAt: new Date()
+        });
+
+        return res;
+    };
 
     // Email Login
     const signIn = (email, password) =>
@@ -36,16 +49,35 @@ export const AuthProvider = ({ children }) => {
 
     // Google Login
     const googleProvider = new GoogleAuthProvider();
-    const googleLogin = () => signInWithPopup(auth, googleProvider);
+    const googleLogin = async () => {
+        const res = await signInWithPopup(auth, googleProvider);
+
+        const ref = doc(db, "users", res.user.uid);
+        const exists = await getDoc(ref);
+
+        if (!exists.exists()) {
+            await setDoc(ref, {
+                name: res.user.displayName,
+                email: res.user.email,
+                photo: res.user.photoURL,
+                createdAt: new Date()
+            });
+        }
+
+        return res;
+    };
 
     // Logout
     const logout = () => signOut(auth);
 
     return (
-        <AuthContext.Provider value={{ user, signUp, signIn, googleLogin, logout }}>
+        <authContext.Provider value={{ user, signUp, signIn, googleLogin, logout }}>
             {!loading && children}
-        </AuthContext.Provider>
+        </authContext.Provider>
     );
 };
 
-export const useAuth = () => useContext(AuthContext);
+// Hook
+export const useAuth = () => useContext(authContext);
+
+export default AuthProvider;
