@@ -1,4 +1,5 @@
 import logo from "./logo.png";
+import cross_icon from "./cross_icon.png"
 
 import user_group from "./user_group.png";
 import star_icon from "./star_icon.svg";
@@ -17,6 +18,7 @@ export const assets = {
     star_dull_icon,
     profile_img_1,
     arrow_icon,
+    cross_icon
 };
 
 export const AiToolsData = [
