@@ -10,21 +10,13 @@ import RemoveBackGround from './pages/RemoveBackGround'
 import RemoveObject from './pages/RemoveObject'
 import Reviweresume from './pages/Reviweresume'
 import Community from './pages/Community'
-import PrivateRoute from './components/PrivateRoute'
 
 const App = () => {
   return (
     <>
       <Routes>
-
         <Route path='/' element={<Home />} />
-
-        {/* 🔐 Protect Everything Under /ai */}
-        <Route path='/ai' element={
-          <PrivateRoute>
-            <Layout />
-          </PrivateRoute>
-        }>
+        <Route path='/ai' element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path='write-article' element={<WriteArticle />} />
           <Route path='blog-titles' element={<BlogTitles />} />
