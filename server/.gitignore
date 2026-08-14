@@ -1,1 +1,4 @@
-client/.gitignore.env
+# Dependencies
+
+node_modules/
+.env
