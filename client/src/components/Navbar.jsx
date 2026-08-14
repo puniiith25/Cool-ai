@@ -10,7 +10,9 @@ const Navbar = () => {
     return (
         <>
             <div className="fixed z-50 w-full backdrop-blur-2xl flex justify-between items-center py-3 px-5">
+
                 <h1 className="text-2xl font-bold">Cool.ai</h1>
+
                 {
                     user ? <UserButton /> :
                         (<button onClick={openSignIn}
@@ -18,6 +20,7 @@ const Navbar = () => {
                         >
                             Get started <ArrowRight />
                         </button>)
+
                 }
 
             </div>
