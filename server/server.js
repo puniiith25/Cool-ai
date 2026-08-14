@@ -3,9 +3,11 @@ import cors from "cors";
 import "dotenv/config";
 import { clerkMiddleware } from "@clerk/express";
 import aiRouter from "./routes/aiRouter.js";
+import connectCloudinary from "./configs/cloudinary.js";
+import UserRouter from "./routes/userRouter.js";
 
 const app = express();
-
+await connectCloudinary()
 app.use(cors());
 app.use(express.json());
 
@@ -17,6 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/ai", aiRouter);
+app.use("/api/user", UserRouter);
 
 const PORT = process.env.PORT || 8000;
 
