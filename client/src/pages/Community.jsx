@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 
 import { dummyPublishedCreationData } from '../assets/assets'
 import { Heart } from 'lucide-react';
-import { useAuth } from '../components/AuthContext';
+import { useUser } from '@clerk/clerk-react';
 
 const Community = () => {
     const [creations, setCreation] = useState([]);
-    const { user } = useAuth();
+    const { user } = useUser();
     const fetchCreation = async () => {
         setCreation(dummyPublishedCreationData);
 
