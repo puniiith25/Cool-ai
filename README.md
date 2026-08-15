@@ -1,35 +1,40 @@
-# 🚀 Cool-ai
+# 🚀 Cool.ai
 
-Cool-ai is a modern AI-powered web application that brings together multiple AI tools in one place.  
-It offers a clean UI, seamless user experience, and integration with powerful AI APIs — perfect for productivity, creativity, and automation.
+Cool.ai is a premium, state-of-the-art AI-powered web application that consolidates a suite of cutting-edge AI utilities into a unified, sleek, glassmorphic dashboard. Written in React/Vite for the frontend and Node/Express for the backend, it delivers lightning-fast responses, robust user authentication, and seamless AI generation.
 
 ---
 
 ## 📌 Features
 
-- 🧠 Multiple AI tools in a single platform  
-- 🎨 Beautiful and responsive UI (React.js + Tailwind CSS)  
-- 🔐 Authentication Using with  ClerkProvider
-- ⚡ Fast API integration for instant results  
-- 📱 Mobile-friendly design  
+*   **📝 Write Article**: Generate high-quality articles with configurable length based on simple text prompts.
+*   **💡 Blog Titles**: Generate engaging, SEO-optimized blog titles for different keywords and categories.
+*   **🎨 AI Image Generator**: Create realistic, fantasy, 3D, and anime style images on-the-fly using advanced AI diffusion models, with options to publish to the community.
+*   **✨ Background Removal**: Automatically isolate subjects and remove image backgrounds with high precision.
+*   **✂️ Object Removal**: Generatively remove specified objects from your photos in seconds using AI-powered inpainting.
+*   **📄 Resume Reviewer**: Upload PDF resumes to get deep, constructive feedback on strengths, weaknesses, and structure via AI-powered parsing.
+*   **👥 Community Feed**: View public creations, browse community-generated artwork, and like creations dynamically.
+*   **🔐 Clerk Auth & Plan Guarding**: Secure account signup and sign-in with Clerk. Features plan guarding (free limits vs premium plan checks).
 
 ---
 
 ## 🛠 Tech Stack
 
-**Frontend:**  
-- React.js  
-- Tailwind CSS  
-- Axios  
-- React Router
-- ClerkProvider
+### Frontend
+- **React.js** & **Vite** (Next-gen bundling & React 19)
+- **Tailwind CSS** (Modern utility-first styling)
+- **Lucide React** (Premium vector icons)
+- **React Router v7** (Declarative routing)
+- **Clerk React** (User auth & session handling)
+- **Axios** (HTTP client for API requests)
 
-**Backend:**  
-- Node.js  
-- Express.js  
-- JWT Authentication  
-- MongoDB (Mongoose ORM)
-{The Backend is Under Development Level}
+### Backend
+- **Node.js** & **Express.js** (REST API)
+- **Neon Serverless PostgreSQL** (Serverless cloud database connection)
+- **Clerk Express** (Backend auth protection and metadata middleware)
+- **Cloudinary SDK** (Media storage and real-time AI image transformations)
+- **Multer** (Multipart form-data parsing for file uploads)
+- **PDF-Parse** (Extracted textual content from uploaded PDF resumes)
+- **OpenAI Node SDK** (Gemini AI OpenAI-compatible completions gateway)
 
 ---
 
@@ -37,19 +42,23 @@ It offers a clean UI, seamless user experience, and integration with powerful AI
 
 ```
 Cool-ai/ 
-├── frontend/
-│ ├── src/
-│ │ ├──assetes/
-│ │ ├── components/
-│ │ ├── pages/
-│ │ ├── App.js
-│ │ ├── index.js
+├── client/                     # Frontend Application (Vite + React)
+│   ├── src/
+│   │   ├── assets/             # Images and local static assets
+│   │   ├── components/         # Reusable UI components (Sidebar, Navbar, Hero, etc.)
+│   │   ├── pages/              # View pages (WriteArticle, BlogTitles, Reviweresume, etc.)
+│   │   ├── App.jsx             # Route definitions & base layout
+│   │   └── main.jsx            # React mounting & ClerkProvider wrapping
+│   ├── package.json
+│   └── vite.config.js
 │
-├── backend/
-│ ├── routes/
-│ ├── models/
-│ ├── controllers/
-│ ├── server.js
+├── server/                     # Backend API (Node + Express)
+│   ├── Controllers/            # Controller logic (aiController, userController)
+│   ├── configs/                # Configuration modules (database, cloudinary, multer)
+│   ├── middlewares/            # Middleware modules (auth, etc.)
+│   ├── routes/                 # Route endpoints (aiRouter, userRouter)
+│   ├── server.js               # Express app setup and server listener
+│   └── package.json
 │
 └── README.md
 ```
@@ -58,33 +67,47 @@ Cool-ai/
 
 ## 🚀 Installation & Setup
 
-1. **Clone the repository**
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/puniiith25/cool-ai.git
-cd cool-ai
-# Backend
-cd backend
+git clone https://github.com/puniiith25/Cool-ai.git
+cd Cool-ai
+```
+
+### 2. Configure Environment Variables
+
+Create a `.env` file in the `server` directory:
+```env
+PORT=4500
+DATABASE_URL=your_neon_postgresql_connection_string
+CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+gemini_api_key=your_google_gemini_api_key
+CLIPDROP_API_KEY=your_clipdrop_api_key
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_SECRET_KEY=your_cloudinary_secret_key
+```
+
+Create a `.env` file in the `client` directory:
+```env
+VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+VITE_BACKEND=http://localhost:4500
+```
+
+### 3. Run Locally
+
+#### Backend Server
+```bash
+cd server
 npm install
+npm run server
+```
 
-# Frontend
-cd ../frontend
+#### Frontend Client
+```bash
+cd client
 npm install
-
-```
----
-
-
-## 🍃 Add environment variables
+npm run dev
 ```
 
-PORT=8000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-AI_API_KEY=your_api_key_here
-
-```
-
-⚠️ Note: The frontend UI is  completed. The backend is currently under progress and will be available soon.
-
-
-
+Your web application will be running at `http://localhost:5173` and connected to the backend API at `http://localhost:4500`.
