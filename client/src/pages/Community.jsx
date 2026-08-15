@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 
 import { dummyPublishedCreationData } from '../assets/assets'
 import { Heart } from 'lucide-react';
-import { useUser } from '@clerk/clerk-react';
+import { useUser, useAuth } from '@clerk/clerk-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND;
@@ -10,10 +10,10 @@ const Community = () => {
     const [creations, setCreation] = useState([]);
     const { user } = useUser();
     const [loading, setloading] = useState(true)
-    const { getToken } = getAuth()
+    const { getToken } = useAuth()
     const fetchCreation = async () => {
         try {
-            const { data } = await axios.get('api/user/get-published-creations', {
+            const { data } = await axios.get('/api/user/get-published-creation', {
                 headers: { Authorization: `Bearer ${await getToken()}` }
             })
             if (data.success) {
@@ -28,7 +28,7 @@ const Community = () => {
     }
     const imageLokeToggle = async (id) => {
         try {
-            const { data } = await axios.post('api/user/toggle-like-creation', { id }, {
+            const { data } = await axios.post('/api/user/toggle-like-creation', { id }, {
                 headers: { Authorization: `Bearer ${await getToken()}` }
             })
             if (data.success) {
@@ -54,9 +54,9 @@ const Community = () => {
                         <div className='absolute bottom-0 top-0 right-0 left-3 flex gap-2 items-end justify-end group-hover:justify-between p-3 group-hover:bg-gradient-to-b from-transparent to-black/80 text-white rounded-lg'>
                             <p className='text-sm hidden group-hover:block'>{item.prompt}</p>
                             <div className='flex gap-1 items-center'>
-                                <p>{item.likes.length}</p>
+                                <p>{item.likes?.length || 0}</p>
                             </div>
-                            <Heart onClick={() => imageLokeToggle(creation.id)} className={`min-w-5 h-5 hover:scale-110 cursor-pointer ${item.likes.includes(user.id) ? 'fill-red-500' : 'text-white'}`} />
+                            <Heart onClick={() => imageLokeToggle(item.id)} className={`min-w-5 h-5 hover:scale-110 cursor-pointer ${item.likes?.includes(user?.id) ? 'fill-red-500' : 'text-white'}`} />
                         </div>
                     </div>
                 ))}

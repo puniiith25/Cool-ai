@@ -2,6 +2,7 @@ import { Edit, Hash, Image, ImageIcon, Sparkles } from 'lucide-react';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useAuth } from '@clerk/clerk-react';
+import axios from 'axios';
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND;
 const Generatelmage = () => {
     const imageStyle = [
@@ -26,11 +27,11 @@ const Generatelmage = () => {
 
             } else {
 
-                toast.error(error.response?.data?.message || error.message || 'Something went wrong');
+                toast.error(data.message || 'Something went wrong');
 
             }
         } catch (error) {
-            toast.error(data.message)
+            toast.error(error.response?.data?.message || error.message || 'Something went wrong');
         }
         setLoading(false)
 

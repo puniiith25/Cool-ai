@@ -13,23 +13,23 @@ const navItems = [
     { to: '/ai/community', label: 'Community', Icon: Users },
 ]
 
-const Sidebar = ({ Sidebar, setsidebar }) => {
+const Sidebar = ({ sidebar, setsidebar }) => {
 
     const { user } = useUser()
     const { signOut, openUserProfile } = useClerk()
     return (
-        <div className={`w-60 bg-white border-r border-gray-200 flex flex-col justify-between items-center max-sm:absolute top-14 bottom-0 ${Sidebar ? 'translate-x-0' : 'max-sm:-translate-x-full'} transition-all duration-300 ease-in-out`}>
+        <div className={`w-60 bg-white border-r border-gray-200 flex flex-col justify-between items-center max-sm:absolute top-14 bottom-0 ${sidebar ? 'translate-x-0' : 'max-sm:-translate-x-full'} transition-all duration-300 ease-in-out`}>
 
             {/* Top Section */}
             <div className='my-7 w-full'>
                 <img
-                    src={user.imageUrl}
+                    src={user?.imageUrl}
                     alt="profile"
                     className='w-14 h-14 rounded-full mx-auto object-cover'
                 />
 
                 <h1 className='mt-1 text-center font-medium'>
-                    {user.fullName}
+                    {user?.fullName}
                 </h1>
 
                 <div className='px-6 mt-5 text-sm text-gray-600 font-medium'>
@@ -59,13 +59,13 @@ const Sidebar = ({ Sidebar, setsidebar }) => {
             <div className='w-full border-t border-gray-200 p-4 px-7 flex items-center justify-between'>
                 <div className='flex gap-4 items-center cursor-pointer'>
                     <img
-                        src={user.imageUrl}
+                        src={user?.imageUrl}
                         alt=""
                         className='w-8 h-8 rounded-full object-cover'
                     />
                     <div>
                         <h1 className='text-sm text-gray-600'>
-                            {user.firstName}
+                            {user?.firstName}
                         </h1>
                         <p className='text-xs text-gray-500'>
                             Premium Plan
@@ -74,7 +74,7 @@ const Sidebar = ({ Sidebar, setsidebar }) => {
                 </div>
 
                 <LogOut
-
+                    onClick={() => signOut()}
                     className='w-4.5 text-gray-400 hover:text-gray-700 transition cursor-pointer'
                 />
             </div>

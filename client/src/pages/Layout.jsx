@@ -17,7 +17,7 @@ const Layout = () => {
                     <img className='w-40 cursor-pointer ' src={assets.logo} alt="logo" onClick={() => navigate('/')} />
                     {sidebar ? <X onClick={() => setsidebar(false)} className='w-6 h-6 text-gray-600 sm:hidden' /> : <Menu onClick={() => setsidebar(true)} className='w-6 h-6 text-gray-600 sm:hidden' />}
                 </nav>
-                <div className='flex-1  w-full flex h-[clac(100vh-64px)]'>
+                <div className='flex-1  w-full flex h-[calc(100vh-64px)]'>
                     <Sidebar sidebar={sidebar} setsidebar={setsidebar} />
                     <div className='flex-1 bg-[#F4F7FB]'>
                         <Outlet />

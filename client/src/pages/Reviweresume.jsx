@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useAuth } from '@clerk/clerk-react';
 import Markdown from 'react-markdown';
+import axios from 'axios';
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND;
 const Reviweresume = () => {
 
@@ -20,17 +21,17 @@ const Reviweresume = () => {
             formdata.append('resume', input)
 
             const token = await getToken();
-            const { data } = await axios.post('/api/ai/resume-review', { formdata }, { headers: { Authorization: `Bearer ${token}` } })
+            const { data } = await axios.post('/api/ai/resume-review', formdata, { headers: { Authorization: `Bearer ${token}` } })
             if (data.success) {
                 setContent(data.content)
 
             } else {
 
-                toast.error(error.response?.data?.message || error.message || 'Something went wrong');
+                toast.error(data.message || 'Something went wrong');
 
             }
         } catch (error) {
-            toast.error(data.message)
+            toast.error(error.response?.data?.message || error.message || 'Something went wrong');
         }
         setLoading(false)
 
@@ -45,7 +46,7 @@ const Reviweresume = () => {
                     <h1 className='text-xl font-semibold'>Resume Review</h1>
                 </div>
                 <p className='mt-6 text-sm font-medium'>Upload resume</p>
-                <input type="file" onChange={(e) => setinput(e.target.files[0])} accept='applicatin/pdf' className='w-full p-2 px-3 mt-2 outline-none text-sm rounded-md border border-gray-300 text-gray-600' required />
+                <input type="file" onChange={(e) => setinput(e.target.files[0])} accept='application/pdf' className='w-full p-2 px-3 mt-2 outline-none text-sm rounded-md border border-gray-300 text-gray-600' required />
 
 
                 <p className='text-xs text-gray-500 fotn-light mt-1'>supports PDF resume only</p>

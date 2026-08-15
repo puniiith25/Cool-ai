@@ -2,6 +2,7 @@ import { Eraser, Sparkles } from 'lucide-react';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useAuth } from '@clerk/clerk-react';
+import axios from 'axios';
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND;
 const RemoveBackGround = () => {
 
@@ -17,17 +18,17 @@ const RemoveBackGround = () => {
             const formdata = new FormData()
             formdata.append('image', input)
             const token = await getToken();
-            const { data } = await axios.post('/api/ai/remove-image-background', { formdata }, { headers: { Authorization: `Bearer ${token}` } })
+            const { data } = await axios.post('/api/ai/remove-image-background', formdata, { headers: { Authorization: `Bearer ${token}` } })
             if (data.success) {
                 setContent(data.content)
 
             } else {
 
-                toast.error(error.response?.data?.message || error.message || 'Something went wrong');
+                toast.error(data.message || 'Something went wrong');
 
             }
         } catch (error) {
-            toast.error(data.message)
+            toast.error(error.response?.data?.message || error.message || 'Something went wrong');
         }
         setLoading(false)
 

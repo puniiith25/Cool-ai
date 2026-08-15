@@ -24,17 +24,17 @@ const WriteArticle = () => {
             setLoading(true)
             const prompt = `Write an article about ${input} in ${selectedLenght.text}`
             const token = await getToken();
-            const { data } = await axios.post('/api/ai/generate-article', { prompt, lenght: selectedLenght.lenght }, { headers: { Authorization: `Bearer ${token}` } })
+            const { data } = await axios.post('/api/ai/generate-article', { prompt, length: selectedLenght.length }, { headers: { Authorization: `Bearer ${token}` } })
             if (data.success) {
                 setContent(data.content)
 
             } else {
 
-                toast.error(error.response?.data?.message || error.message || 'Something went wrong');
+                toast.error(data.message || 'Something went wrong');
 
             }
         } catch (error) {
-            toast.error(data.message)
+            toast.error(error.response?.data?.message || error.message || 'Something went wrong');
         }
         setLoading(false)
 

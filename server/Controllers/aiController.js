@@ -36,8 +36,7 @@ export const generateArticle = async (req, res) => {
                     content: prompt
                 }
             ],
-            temperature: 0.7,
-            max_completion_tokens: length
+            temperature: 0.7
         });
 
         const content = response.choices[0].message.content;
@@ -98,8 +97,7 @@ export const generateBlogTitle = async (req, res) => {
                     content: prompt
                 }
             ],
-            temperature: 0.7,
-            max_completion_tokens: 100
+            temperature: 0.7
         });
 
         const content = response.choices[0].message.content;
@@ -143,7 +141,7 @@ export const generateImage = async (req, res) => {
         const plan = req.plan;
 
 
-        if (plan == "premium") {
+        if (plan !== "premium") {
             return res.json({
                 success: false,
                 message: "only For Premium user"
@@ -157,7 +155,7 @@ export const generateImage = async (req, res) => {
             responseType: "arraybuffer"
         })
 
-        const base64Image = `data:image/png;base64,${Buffer.from(data, 'binary').toString}`
+        const base64Image = `data:image/png;base64,${Buffer.from(data, 'binary').toString('base64')}`
         const { secure_url } = await cloudinary.uploader.upload(base64Image)
 
 
@@ -188,7 +186,7 @@ export const removeImageObject = async (req, res) => {
         const { userId } = req.auth();
 
         const { object } = req.body;
-        const { image } = req.file;
+        const image = req.file;
 
         const plan = req.plan;
 
@@ -202,17 +200,18 @@ export const removeImageObject = async (req, res) => {
 
 
 
-        const { secure_url } = await cloudinary.uploader.upload(image.path)
-        const image_url = await cloudinary.url(secure_url, {
-            transformation: [{ effect: `gen_remove:${object}` }],
+        const { public_id } = await cloudinary.uploader.upload(image.path)
+        const image_url = cloudinary.url(public_id, {
+            transformation: [{ effect: `gen_remove:prompt_(${object})` }],
             resource_type: 'image'
         })
 
+        const promptText = `Remove ${object} from image`;
         await sql`
             INSERT INTO creations
             (user_id, prompt, content, type)
             VALUES
-            (${userId}, 'Remove ${object} from image', ${image_url}, 'image')
+            (${userId}, ${promptText}, ${image_url}, 'image')
         `;
 
         return res.json({
@@ -234,12 +233,12 @@ export const removeImageBackground = async (req, res) => {
     try {
         const { userId } = req.auth();
 
-        const { image } = req.file;
+        const image = req.file;
 
         const plan = req.plan;
 
 
-        if (plan == "premium") {
+        if (plan !== "premium") {
             return res.json({
                 success: false,
                 message: "only For Premium user"
@@ -248,11 +247,10 @@ export const removeImageBackground = async (req, res) => {
 
 
 
-        const { secure_url } = await cloudinary.uploader.upload(image.path, {
-            transformation: [{
-                effect: 'backgroung_removal',
-                background_removal: 'remove_the_background'
-            }]
+        const { public_id } = await cloudinary.uploader.upload(image.path)
+        const secure_url = cloudinary.url(public_id, {
+            transformation: [{ effect: 'background_removal' }],
+            resource_type: 'image'
         })
 
 
@@ -282,12 +280,12 @@ export const resumeReview = async (req, res) => {
     try {
         const { userId } = req.auth();
 
-        const { resume } = req.file;
+        const resume = req.file;
 
         const plan = req.plan;
 
 
-        if (plan == "premium") {
+        if (plan !== "premium") {
             return res.json({
                 success: false,
                 message: "only For Premium user"
@@ -300,7 +298,8 @@ export const resumeReview = async (req, res) => {
             return res.json({ success: false, message: "Resume file zise shoud be below 5MB" })
         }
         const dataBufffer = fs.readFileSync(resume.path)
-        const pdfdata = await PDFParse(dataBufffer)
+        const parser = new PDFParse(new Uint8Array(dataBufffer));
+        const pdfdata = await parser.getText();
 
         const prompt = `Review the following resume and provide constructive feedback on its strenth , weaknesses , and areas for improvent.${pdfdata.text}`
 
@@ -312,8 +311,7 @@ export const resumeReview = async (req, res) => {
                     content: prompt
                 }
             ],
-            temperature: 0.7,
-            max_completion_tokens: 1000
+            temperature: 0.7
         });
 
         const content = response.choices[0].message.content;

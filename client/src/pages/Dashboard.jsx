@@ -4,18 +4,19 @@ import { Gem, Sparkles } from 'lucide-react';
 import CreationItem from '../components/CreationItem';
 import toast from 'react-hot-toast'
 import { useAuth } from '@clerk/clerk-react';
+import axios from 'axios';
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND;
 const Dashboard = () => {
     const [creations, setCreations] = useState([]);
     const [loading, setloading] = useState(true)
-    const { getToken } = getAuth()
+    const { getToken } = useAuth()
     const getDashboardData = async () => {
         try {
-            const { data } = await axios.get('api/user/get-user-creations', {
+            const { data } = await axios.get('/api/user/get-user-creation', {
                 headers: { Authorization: `Bearer ${await getToken()}` }
             })
             if (data.success) {
-                setCreation(data.creations)
+                setCreations(data.creations)
             } else {
                 toast.error(data.message)
             }
@@ -56,7 +57,7 @@ const Dashboard = () => {
                 </div>
 
             </div>
-            {loading ? (<div className='flex justifycq items-center h-3/4'>
+            {loading ? (<div className='flex justify-center items-center h-3/4'>
                 <div className=' animate-spin rounded-full h-11 w-11 border-3 border-purple-500 border-t-transparent'></div>
 
             </div>) : (<div className='space-y-3'>

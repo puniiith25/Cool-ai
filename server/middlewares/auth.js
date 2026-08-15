@@ -20,8 +20,9 @@ export const auth = async (req, res, next) => {
 
         req.free_usage = free_usage;
 
-        // For now, test without billing/plan logic
-        req.plan = "free";
+        const plan = user.publicMetadata?.plan || user.privateMetadata?.plan || "free";
+
+        req.plan = plan;
 
         next();
 
