@@ -12,11 +12,11 @@ app.use(cors());
 app.use(express.json());
 
 // Clerk
-app.use(clerkMiddleware());
 
-app.get("/", (req, res) => {
+app.get("/api/health", (req, res) => {
     res.send("server is Live!");
 });
+app.use(clerkMiddleware());
 
 app.use("/api/ai", aiRouter);
 app.use("/api/user", UserRouter);

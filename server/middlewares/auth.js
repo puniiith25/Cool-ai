@@ -5,7 +5,7 @@ export const auth = async (req, res, next) => {
         const { isAuthenticated, userId } = getAuth(req);
 
         console.log("isAuthenticated:", isAuthenticated);
-        console.log("userId:", userId);
+
 
         if (!isAuthenticated || !userId) {
             return res.status(401).json({
